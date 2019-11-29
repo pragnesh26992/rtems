@@ -1,4 +1,4 @@
-===================================================================================================
+=========================================================================================
 
 Build procedure
 
@@ -17,7 +17,7 @@ https://docs.rtems.org/branches/master/user/start/index.html
 	$ ../source-builder/sb-set-builder --prefix=<RTEMSTOOLS_INSTALL_PATH> 5/rtems-riscv  
 
 	After installation  
-	$ export PATH=<RTEMSTOOLS_INSTALL_PATH>/bin:$PATH
+	$ export PATH=<RTEMSTOOLS_INSTALL_PATH>/bin:$PATH  
 
 2. Build RTEMS kernel
 	
@@ -45,7 +45,7 @@ https://docs.rtems.org/branches/master/user/start/index.html
 	$ objcopy -O ihex riscv-rtems5/c/frdme310arty/testsuites/samples/hello.exe tmp.hex  
 	$ objcopy -I ihex -O binary tmp.hex hello.bin  
 
-===================================================================================================
+=========================================================================================
 
 Test procedure  
 
@@ -61,9 +61,9 @@ Toolz->Program
 2) OpenOCD JTAG connection  
 
 Please refer FreedomStudio\SiFive\Documentation\SiFive-E310-arty-gettingstarted-v1.0.5.pdf 
-for connection of JTAG debugger (Olimex) to PMOD
+for connection of JTAG debugger (Olimex) to PMOD  
 
-Please referee RTEMS documentation for more details  
+Please referee RTEMS documentation for more details    
 https://docs.rtems.org/branches/master/user/tools/tester.html  
 
 This is tested as per "GDB and JTAG" configuration specified here  
@@ -75,7 +75,7 @@ https://static.dev.sifive.com/dev-tools/riscv-openocd-0.10.0-2019.08.2-x86_64-li
 3. Connect OpenOCD  
 
 Flash the Bootloader in Arty A7  
-$ git clone git@github.com:pragnesh26992/rtems.git rtems_install
+$ git clone git@github.com:pragnesh26992/rtems.git rtems_install  
 $ sudo openocd -f rtems_install/openocd-config/sifive-e31-arty.cfg -c "program bootloader.hex verify reset exit"  
 
 Flash the Device tree in Arty A7  
@@ -85,16 +85,16 @@ Flash the RTEMS binary <RTEMS_BINARY_Name>.bin in Arty A7
 $ sudo openocd -f rtems_install/openocd-config/sifive-e31-arty.cfg -c "program <RTEMS_BINARY_Name>.bin verify reset exit 0x40600000" 
 
 User can see the Output on UART through minicom with the baudrate of 115200 (8N1)  
-$ sudo minicom -D /dev/ttyUSB
+$ sudo minicom -D /dev/ttyUSB  
 
-===================================================================================================
+=========================================================================================
 
-If user wants to run all RTEMS testsuites (all test cases) then follow this steps
+If user wants to run all RTEMS testsuites (all test cases) then follow this steps  
 
 1. Flash the Device tree in Arty A7  
 $ sudo openocd -f rtems_install/openocd-config/sifive-e31-arty.cfg -c "program frdme310arty.dtb verify reset exit 0x40500000"  
 
-2. Change start.S of RTEMS kernel for RISCV as shown below
+2. Change start.S of RTEMS kernel for RISCV as shown below  
 
 <rtems-root>bsps/riscv/shared/start/start.S  
 	 #ifdef BSP_START_COPY_FDT_FROM_U_BOOT  
@@ -103,7 +103,7 @@ $ sudo openocd -f rtems_install/openocd-config/sifive-e31-arty.cfg -c "program f
         call    bsp_fdt_copy  
 	 #endif  
 	
-Repeat Step 2 of Build procedure to build the RTEMS kernel.
+Repeat Step 2 of Build procedure to build the RTEMS kernel.  
 
 3. Linux host ser2net:  
 run command. 
@@ -143,11 +143,11 @@ $ cp rtems_install/gdb_script/.gdbinit ~/
 7. Run Test  
 $ cd frdm310_build  
 $ export RISCV=<RTEMSTOOLS_INSTALL_PATH>/bin  
-$ rtems-test --rtems-bsp=frdme310arty --rtems-tools=$RISCV --report-mode=all --jobs=1 --warn-all --log=rtems-test-all-log.txt ./riscv-rtems5/c/frdme310arty/testsuites
+$ rtems-test --rtems-bsp=frdme310arty --rtems-tools=$RISCV --report-mode=all --jobs=1 --warn-all --log=rtems-test-all-log.txt ./riscv-rtems5/c/frdme310arty/testsuites  
 
-result should look like this
-[1/3] p:0 f:0 u:0 e:0 I:0 B:0 t:0 i:0 W:0 | riscv/frdm310: dhrystone.exe
-[2/3] p:0 f:0 u:0 e:0 I:0 B:1 t:0 i:0 W:0 | riscv/frdm310: linpack.exe
-[3/3] p:0 f:0 u:0 e:0 I:0 B:2 t:0 i:0 W:0 | riscv/frdm310: whetstone.exe
+result should look like this  
+[1/3] p:0 f:0 u:0 e:0 I:0 B:0 t:0 i:0 W:0 | riscv/frdm310: dhrystone.exe  
+[2/3] p:0 f:0 u:0 e:0 I:0 B:1 t:0 i:0 W:0 | riscv/frdm310: linpack.exe  
+[3/3] p:0 f:0 u:0 e:0 I:0 B:2 t:0 i:0 W:0 | riscv/frdm310: whetstone.exe  
 
 
